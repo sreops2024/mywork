@@ -1,0 +1,9 @@
+database_host: localhost
+database_port: 1521
+database_service: orcl
+database_user: admin
+database_password: password
+sql_file_path: /path/to/sql/script.sql
+log_file_path: /path/to/log/file.log
+default_timeout: 60
+default_retries: 3

@@ -1,0 +1,7 @@
+db_host: "localhost"
+db_port: 1521
+db_service_name: "orcl"
+db_user: "your_username"
+db_password: "your_password"
+sql_file_path: "/path/to/your/sql_file.sql"
+log_file_path: "/path/to/your/log_file.log"

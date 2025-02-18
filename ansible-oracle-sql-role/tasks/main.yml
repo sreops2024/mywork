@@ -1,0 +1,41 @@
+- name: Execute Oracle SQL script
+  hosts: all
+  tasks:
+    - name: Generate SQL execution script from template
+      template:
+        src: execute_sql.sh.j2
+        dest: /tmp/execute_sql.sh
+      vars:
+        sql_file: "{{ sql_file }}"
+        log_file: "{{ log_file }}"
+        db_user: "{{ db_user }}"
+        db_password: "{{ db_password }}"
+        db_host: "{{ db_host }}"
+        db_service: "{{ db_service }}"
+
+    - name: Make the SQL execution script executable
+      file:
+        path: /tmp/execute_sql.sh
+        mode: '0755'
+
+    - name: Execute the SQL script
+      command: /tmp/execute_sql.sh
+      register: sql_execution
+
+    - name: Check for Oracle errors in the log file
+      shell: grep -i "error" {{ log_file }}
+      register: error_check
+      ignore_errors: true
+
+    - name: Display log file content
+      command: cat {{ log_file }}
+      register: log_content
+
+    - name: Output log content
+      debug:
+        var: log_content.stdout
+
+    - name: Output any Oracle errors found
+      debug:
+        var: error_check.stdout
+      when: error_check.stdout != ""

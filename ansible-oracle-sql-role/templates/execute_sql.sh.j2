@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Variables
+SQL_FILE="{{ sql_file }}"
+LOG_FILE="{{ log_file }}"
+DB_USER="{{ db_user }}"
+DB_PASSWORD="{{ db_password }}"
+DB_HOST="{{ db_host }}"
+DB_PORT="{{ db_port }}"
+DB_SERVICE="{{ db_service }}"
+
+# Execute SQL script
+sqlplus -s "${DB_USER}/${DB_PASSWORD}@//${DB_HOST}:${DB_PORT}/${DB_SERVICE}" @"${SQL_FILE}" > "${LOG_FILE}" 2>&1
+
+# Check for Oracle errors
+if grep -q "ORA-" "${LOG_FILE}"; then
+    echo "Errors found in the log file:"
+    cat "${LOG_FILE}"
+    exit 1
+else
+    echo "SQL script executed successfully. Log file content:"
+    cat "${LOG_FILE}"
+fi
